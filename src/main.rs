@@ -1,7 +1,10 @@
 mod cpu;
+#[cfg(test)]
+mod test;
+
 use cpu::*;
 
 fn main() {
-    let cpu = CPU::default();
+    let mut cpu = CPU::default();
     cpu.foo();
 }
