@@ -227,4 +227,16 @@ fn move_other_flags_behaviout(){
         IMEDIATE_VALUE(vec![0xff, 0xbe, 0xe2, 0x00]), MEMORY_ADDR(0x4242));
     cpu.execute(&inst);
     assert_eq!(cpu.get_ccr(), 0b00011000)
-} 
+}
+
+#[test]
+fn test_tst_functional() {
+    let mut cpu = CPU::default();
+    let inst = Instruction::new(TST, BYTE, IMEDIATE_VALUE(vec![0x00, 0x00, 0x00, 0x80]), EMPTY);
+    cpu.execute(&inst);
+    assert_eq!(cpu.get_ccr(), 0b00001000);
+    
+    let inst = Instruction::new(TST, BYTE, IMEDIATE_VALUE(vec![0x32, 0x41, 0x23, 0x00]), EMPTY);
+    cpu.execute(&inst);
+    assert_eq!(cpu.get_ccr(), 0b00000100);
+}

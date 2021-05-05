@@ -13,8 +13,8 @@ fn _get_usize(op_size: &OpSize) -> usize {
     }
 }
 
-fn _is_null(val: &Vec<u8>) -> bool {
-    for byte_ in &val[..] {
+fn _is_null(val: &[u8]) -> bool {
+    for byte_ in val {
         if *byte_ != 0 {
             return false;
         }
@@ -22,7 +22,7 @@ fn _is_null(val: &Vec<u8>) -> bool {
     return true;
 }
 
-fn _is_negative(val: &Vec<u8>) -> bool {
+fn _is_negative(val: &[u8]) -> bool {
     if val[0] > 0x7f {
         true
     }
@@ -42,6 +42,7 @@ impl super::CPU {
             MEMORY_ADDR(addr) => &mut self.memory[*addr..(*addr + 4 - adjust)],
             SR => &mut self.sr,
             CCR => &mut self.sr[1..],
+            EMPTY => panic!("TODO: implement behaviour when instruction has empty args"),
         }
     }
 
@@ -52,17 +53,16 @@ impl super::CPU {
         
         let lhs = self.get_target(inst.get_lhs(), inst.get_size());
         let mut tmp: Vec<u8> = vec![0;lhs.len()];
-        println!("{}", lhs.len());
         tmp.copy_from_slice(lhs);
         
-        if _is_negative(&tmp) {
+        if _is_negative(&tmp[..]) {
             self.set_n_flag();
         }
         else {
             self.clear_n_flag();
         }
 
-        if _is_null(&tmp) {
+        if _is_null(&tmp[..]) {
             self.set_z_flag();
         }
         else {
@@ -75,6 +75,26 @@ impl super::CPU {
             trg[i] = tmp[i];
             i += 1;
         }
-        
+
+    }
+
+    pub fn perform_tst(&mut self, inst : &Instruction) {
+        let elt = self.get_target(inst.get_lhs(), inst.get_size());
+        let neg = _is_negative(&elt);
+        let zero = _is_null(&elt);
+        self.clear_v_flag();
+        self.clear_c_flag();
+        if neg {
+            self.set_n_flag();
+        }
+        else {
+            self.clear_n_flag();
+        }
+        if zero {
+            self.set_z_flag();
+        }
+        else {
+            self.clear_z_flag();
+        }
     }
 }

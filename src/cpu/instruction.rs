@@ -12,6 +12,7 @@ pub enum Mnemonic {
     ADD,
     ADDA,
     LEA,
+    TST,
 }
 
 #[derive(Debug)]
@@ -22,6 +23,7 @@ pub enum DataContainer {
     MEMORY_ADDR(usize),
     SR,
     CCR,
+    EMPTY,
 }
 
 pub struct Instruction {

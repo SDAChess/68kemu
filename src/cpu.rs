@@ -180,6 +180,7 @@ impl CPU {
     pub fn execute(&mut self, inst: &Instruction) {
         match inst.get_op() {
             MOVE => self.perform_move(inst),
+            TST => self.perform_tst(inst),
             _ => (),
         }
     }
