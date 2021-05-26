@@ -33,6 +33,14 @@ pub struct Instruction {
     trg: DataContainer,
 }
 
+impl Copy for OpSize { }
+
+impl Clone for OpSize {
+    fn clone(&self) -> OpSize {
+        *self
+    }
+}
+
 impl Instruction {
     pub fn new(op: Mnemonic, size: OpSize, lhs: DataContainer, trg: DataContainer) -> Instruction {
         // Need to implement safety for the 

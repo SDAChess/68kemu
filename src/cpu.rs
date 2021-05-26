@@ -181,6 +181,7 @@ impl CPU {
         match inst.get_op() {
             MOVE => self.perform_move(inst),
             TST => self.perform_tst(inst),
+            ADD => self.perform_add(inst),
             _ => (),
         }
     }
